@@ -1,11 +1,12 @@
 clc;
 clear all;
-delta_t=1;
+lamda=5;
+delta_t=0.5;
 % W=10^6;
 W=10^3;
 T=71;
 tau=50;
-N=T/delta_t;
+N=T/delta_t+1;
 M=tau/delta_t;
 Fu_max=10^3;
 Fg_max=10^5;
@@ -18,11 +19,11 @@ v_f=-v_0;
 V_max=30;
 V_min=1;
 A_max=12;
-L=10^2;
+L=1.5*10^2;
 H=10^2;
 K=10^3;
 P=0.1;
-P=0.01;
+% P=0.01;
 beta_0=10^-6;
 theta_2=10^-9;
 gamma_0=beta_0*P/theta_2;
@@ -56,7 +57,7 @@ alphaa_j=0.5;
 Fu_j=Fu_max;
 Fg_j=Fg_max;
 %
-
+save('..\model_1数据结果\v_j','v_j');
 %验证初始解
 a1=(1-alphaa_j)*K*L-Fu_j*T;
 b=L*alphaa_j*K-Fg_j*(T-tau);
@@ -135,7 +136,7 @@ for n=1:N-1
 %     temp_1=temp_1+c1*pow_pos(norm(v(:,n)),3)+c2*c3 + 2*c2*pow_pos(norm(a(:,n)),2)/g^2/omega_j(n) - c2/(2*g^2*omega_j(n)^2)*(  (omega_j(n)+norm(a_j(:,n))^2)^2+2*(omega_j(n)+norm(a_j(:,n))^2)*(2*a_j(:,n)'*(a(:,n)-a_j(:,n))+omega(n)-omega_j(n)) - omega(n)^2 - pow_pos(norm(a(:,n)),4)     );
     temp_1=temp_1+c1*pow_pos(norm(v(:,n)),3)+c2*inv_pos(omega(n))+c2/g^2*quad_over_lin(a(:,n),omega(n));
 end
-obj=varphi+psii+temp_1;
+obj=1/(lamda+1)*varphi+lamda/(lamda+1)*(psii+temp_1);
 % minimize varphi+psii+temp_1
 minimize obj
 
@@ -197,7 +198,7 @@ v_j=v;
 % obj=varphi+psii+temp_1;
 f = [f obj];
 end
-f=f+P*tau+1/2*m*(norm(v(:,N))^2-norm(v(:,1))^2);
+f=f+lamda/(lamda+1)*(P*tau+1/2*m*(norm(v(:,N))^2-norm(v(:,1))^2));
 figure(1);
 plot(f,'-o')
 
@@ -219,19 +220,19 @@ end
 % end
 % error=alphaa*L-test;
 
-save('..\model_1数据结果\p_alphaa','alphaa');
-save('..\model_1数据结果\p_Fu','Fu');
-save('..\model_1数据结果\p_Fg','Fg');
-save('..\model_1数据结果\p_q','q');
-save('..\model_1数据结果\p_v','v');
-save('..\model_1数据结果\p_a','a');
-save('..\model_1数据结果\p_f','f');
+% save('..\model_1数据结果\p_alphaa','alphaa');
+% save('..\model_1数据结果\p_Fu','Fu');
+% save('..\model_1数据结果\p_Fg','Fg');
+% save('..\model_1数据结果\p_q','q');
+% save('..\model_1数据结果\p_v','v');
+% save('..\model_1数据结果\p_a','a');
+% save('..\model_1数据结果\p_f','f');
 
 
-% save('..\model_1数据结果\h_alphaa','alphaa');
-% save('..\model_1数据结果\h_Fu','Fu');
-% save('..\model_1数据结果\h_Fg','Fg');
-% save('..\model_1数据结果\h_q','q');
-% save('..\model_1数据结果\h_v','v');
-% save('..\model_1数据结果\h_a','a');
-% save('..\model_1数据结果\h_f','f');
+save('..\model_1数据结果\h_alphaa','alphaa');
+save('..\model_1数据结果\h_Fu','Fu');
+save('..\model_1数据结果\h_Fg','Fg');
+save('..\model_1数据结果\h_q','q');
+save('..\model_1数据结果\h_v','v');
+save('..\model_1数据结果\h_a','a');
+save('..\model_1数据结果\h_f','f');
